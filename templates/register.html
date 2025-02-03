@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Inscription{% endblock %}
+{% block content %}
+<h2>Inscription</h2>
+<form method="POST">
+  <input type="email" name="email" placeholder="Email" required><br>
+  <input type="password" name="password" placeholder="Mot de passe" required><br>
+  <input type="text" name="first_name" placeholder="Prénom" required><br>
+  <input type="text" name="last_name" placeholder="Nom" required><br>
+  <select name="role" required>
+    <option value="student">Élève</option>
+    <option value="teacher">Professeur</option>
+    <option value="admin">Administrateur</option>
+  </select><br>
+  <!-- Vous pouvez ajouter des sélections spécifiques pour school_id et class_id -->
+  <button type="submit">S'inscrire</button>
+</form>
+{% endblock %}
