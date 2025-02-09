@@ -3,21 +3,25 @@ from psycopg2.extras import execute_values
 from faker import Faker
 import random
 from datetime import timedelta
+import uuid
+
+
+
 
 # Configuration de la connexion à la base de données
 conn = psycopg2.connect(
     dbname='schoolproject',         # Remplacez par le nom de votre base de données
-    user='root',         # Remplacez par votre utilisateur PostgreSQL
+    user='postgres',         # Remplacez par votre utilisateur PostgreSQL
     password='postGres',  # Remplacez par votre mot de passe
     host='localhost',
-    port='5432'
+    port='5433'
 )
 cur = conn.cursor()
 faker = Faker('fr_FR')
 
-# 1. Génération des écoles
-schools = [(faker.company(), faker.address()) for _ in range(5)]
-execute_values(cur, "INSERT INTO schools (name, address) VALUES %s RETURNING id;", schools)
+# Génération des écoles avec UUID générés côté Python
+schools = [(str(uuid.uuid4()), faker.company(), faker.address()) for _ in range(5)]
+execute_values(cur, "INSERT INTO schools (id, name, address) VALUES %s RETURNING id;", schools)
 school_ids = [row[0] for row in cur.fetchall()]
 conn.commit()
 
