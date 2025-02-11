@@ -1,10 +1,9 @@
-import os 
+import psycopg2
+class Config:
+    SECRET_KEY = "your_secret_key"
 
-class config:
+    DATABASE_URL = "postgresql://postgres:postGres@localhost:5433/schoolproject"
 
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    database = 'schoolproject'
-    user = 'root'
-    password = 'postGres'
-    host = 'localhost'
-    port = '5432'
+def get_db_connection():
+    conn = psycopg2.connect(DATABASE_URL)
+    return conn
