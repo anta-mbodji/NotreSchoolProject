@@ -2,7 +2,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import enum
 from flask import Flask, session, redirect, render_template
 from config import connection as conn
-import functions as func
+import models.functions as func
 
 mydb = conn
 class User:
