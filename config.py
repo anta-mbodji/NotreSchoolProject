@@ -1,9 +1,13 @@
 import psycopg2
-class Config:
-    SECRET_KEY = "your_secret_key"
 
-    DATABASE_URL = "postgresql://postgres:postGres@localhost:5433/schoolproject"
 
-def get_db_connection():
-    conn = psycopg2.connect(DATABASE_URL)
+def connection():
+    # Configuration de la connexion à la base de données
+    conn = psycopg2.connect(
+        dbname='ecole_db',         # Remplacez par le nom de votre base de données
+        user='bouddha',         # Remplacez par votre utilisateur PostgreSQL
+        password='logyouin',  # Remplacez par votre mot de passe
+        host='localhost',
+        port='5432'
+    )
     return conn

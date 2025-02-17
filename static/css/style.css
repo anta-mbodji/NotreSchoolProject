@@ -1,7 +1,194 @@
+/* General body styling */
 body {
-    background-color: #f8f9fa;
+    background-image: url('../img/bg.jpg');
+    background-size: cover;
+    color: #333;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    transition: background 0.3s, color 0.3s;
 }
-.card {
+
+/* Dark Mode */
+.dark-mode {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0,0, 0, 0.6)),url('../img/bg.jpg');
+    background-size: cover;
+    color: #e0e0e0;
+}
+
+/* Blue Mode */
+.blue-mode {
+    background: #0d47a1;
+    color: #ffffff;
+}
+
+/* Container */
+.login-container {
+    width: 100%;
     max-width: 500px;
-    margin: auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Dark and Blue Mode for Login Box */
+.dark-mode .login-container,
+.blue-mode .login-container {
+    background-color: #333;
+    box-shadow: 0px 0px 25px rgba(255, 255, 255, 0.1);
+}
+
+/* Input Fields */
+.input-group input {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 12px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+/* Focus Effect */
+.input-group input:focus {
+    border-color: #2196F3;
+    box-shadow: 0px 0px 8px rgba(33, 150, 243, 0.6);
+}
+
+/* Buttons */
+button {
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 16px;
+    width: 100%;
+    transition: background 0.3s;
+}
+
+/* Light Mode Buttons */
+.light-mode button {
+    background: #2196F3;
+    color: white;
+    border: none;
+}
+
+/* Dark Mode Buttons */
+.dark-mode button {
+    background: #64b5f6;
+    color: white;
+    border: none;
+}
+
+/* Blue Mode Buttons */
+.blue-mode button {
+    background: #1565c0;
+    color: white;
+    border: none;
+}
+
+/* Hover Effects */
+button:hover {
+    opacity: 0.9;
+}
+
+/* New Theme Switcher (Stylish Toggle) */
+.theme-switcher {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    padding: 10px;
+}
+
+.theme-switcher .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.theme-switcher .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-switcher .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 50px;
+}
+
+.theme-switcher .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    border-radius: 50px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+}
+
+/* When the toggle is checked, change the background */
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+/* Move the slider to the right when checked */
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Dark Mode Styling for Toggle */
+.dark-mode .theme-switcher .slider {
+    background-color: #64b5f6;
+}
+
+.dark-mode input:checked + .slider {
+    background-color: #1565c0;
+}
+
+/* Blue Mode Styling for Toggle */
+.blue-mode .theme-switcher .slider {
+    background-color: #0d47a1;
+}
+
+.blue-mode input:checked + .slider {
+    background-color: #1565c0;
+}
+
+/* Modal Styling */
+.modal-content {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.modal-header {
+    border-bottom: 2px solid #2196F3;
+}
+
+.modal-body p {
+    color: #333;
+    font-size: 16px;
+}
+
+/* Links */
+a {
+    color: #2196F3;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }

@@ -1,23 +1,18 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg2
-from config import Config  # Import correct de la configuration
+import models.functions as func
+import models.utilisateurs.utilisateur as user
+
+
+from config import connection # Import correct de la configuration
 
 from flask import Blueprint
 
 auth = Blueprint('auth', __name__)
 
-
+# secret_key = "IamBouddha"
 # Fonction pour obtenir une connexion PostgreSQL
-def get_db_connection():
-    conn = psycopg2.connect(
-        database=Config.database,
-        user=Config.user,
-        password=Config.password,
-        host=Config.host,
-        port=Config.port
-    )
-    return conn
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
@@ -33,7 +28,7 @@ def register():
 
         password_hash = generate_password_hash(password)
 
-        conn = get_db_connection()
+        conn = connection()
         cur = conn.cursor()
         try:
             cur.execute("""
@@ -55,30 +50,27 @@ def register():
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    error_message = None
     if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("SELECT id, password_hash, role FROM users WHERE email = %s", (email,))
-        user = cur.fetchone()
-        cur.close()
-        conn.close()
-
-        if user and check_password_hash(user[1], password):  # Vérification correcte du mot de passe
-            user_id, _, role = user
-            flash("Connexion réussie", "success")
-            if role == 'student':
-                return redirect(url_for('dashboard_student.home'))
-            elif role == 'teacher':
-                return redirect(url_for('dashboard_teacher.home'))
-            elif role == 'admin':
-                return redirect(url_for('dashboard_admin.home'))
+        if 'email' in session:
+            return redirect('/dashboard')
         else:
-            flash("Identifiants incorrects", "danger")
-    
-    return render_template('login.html')
+            email = request.form.get('login')
+            password = request.form.get('mdpass')
+            # print(func.getuser(email))
+            result = user.login(func.getuser(email))
+            session['email'] = email
+            # print(session['email'])
+            # return 0
+            if result:
+                session['email'] = email
+                session['profile'] = func.getProfile(email)
+                return redirect('/route_dashboard')
+            else:
+                print(f"Erreur lors de la connexion : {e.pgerror}", "danger")
+                error_message = "no connection"
+                return render_template('login.html', error_message=error_message)
+        
 @auth.route('/register_user', methods=['GET', 'POST'])
 def register_user():
     print("Route /register appelée")  # <-- Debugging
@@ -88,3 +80,13 @@ def register_user():
 def login_user():
     print("Route /login appelée")  # <-- Debugging
     return render_template('login.html')
+
+@auth.route('/forgot_password', methods=['POST'])
+def forgot_password():
+    email = request.form.get('email')
+
+    # Dummy check - in a real app, check if email exists in DB
+    if email == "user@example.com":
+        return "Password reset link sent to your email!"
+    else:
+        return render_template('login.html', error_message="Email not found! Try again.")
