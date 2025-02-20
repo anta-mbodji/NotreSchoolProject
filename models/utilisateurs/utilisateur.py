@@ -6,12 +6,14 @@ import models.functions as func
 
 mydb = conn
 class User:
-    def __init__(self, id_user, surname, name, email, password):
+    def __init__(self, id_user, surname, name, email, password, profile, status):
         self._id_user = id_user
         self._surname = surname
         self._name = name
         self._email = email
         self._password = password
+        self._profile = profile
+        self._status = status
     
     @property
     def name(self):
@@ -46,33 +48,29 @@ class User:
         
     @password.setter
     def password(self, password):
-        self._password = generate_password_hash(password)
+        self._password = password
         return self._password
-        
-    def check_password(self, password):
-        return check_password_hash(self.password, password)
     
-    def login(self):
-        # print(self._email)
-        if func.get_status(self.email) != 'online':
-            cursor = mydb.cursor()
-            query = "SELECT * FROM utilisateur WHERE email = %s AND password = %s"
-            values = (self.email, self._password)
-            cursor.execute(query, values)
-            result = cursor.fetchone()
-            if result:
-                func.update_status(self.email, 'online')
-                session['id'] = result[0]
-                session['name'] = result[1]
-                session['surname'] = result[2]
-                session['email'] = result[3]
-                session['profile'] = result[4]
-                session['status'] = result[5]
-                return (True)
-            else:
-                return (False)
-        else:
-            return self.email + ' is already connected'
+    @property
+    def profile(self):
+        return self._profile
+    
+    @profile.setter
+    def profile(self, profile):
+        self._profile = profile
+        return self._profile
+    
+    @property
+    def status(self):
+        return self._status
+    
+    @status.setter
+    def status(self, status):
+        self._status = status
+        return self._status
+        
+    # def check_password(self, password):
+    #     return check_password_hash(self.password, password)
         
     def logout(self):
         func.update_status(self.email, 'offline')

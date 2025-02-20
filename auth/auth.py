@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg2
 import models.functions as func
-import models.utilisateurs.utilisateur as user
+from models.utilisateurs.utilisateur import User as user
 
 
 from config import connection # Import correct de la configuration
@@ -11,7 +11,7 @@ from flask import Blueprint
 
 auth = Blueprint('auth', __name__)
 
-# secret_key = "IamBouddha"
+
 # Fonction pour obtenir une connexion PostgreSQL
 
 @auth.route('/register', methods=['GET', 'POST'])
@@ -52,24 +52,19 @@ def register():
 def login():
     error_message = None
     if request.method == 'POST':
-        if 'email' in session:
-            return redirect('/dashboard')
+        email = request.form['login']
+        password = request.form['mdpass']
+        print(f"{email} {password}")
+        result = func.login(email, password)
+        print(result)
+        if result is not None:
+            session['email'] = result.email
+            session['profile'] = func.getProfile(email)
+            return redirect('/route')
         else:
-            email = request.form.get('login')
-            password = request.form.get('mdpass')
-            # print(func.getuser(email))
-            result = user.login(func.getuser(email))
-            session['email'] = email
-            # print(session['email'])
-            # return 0
-            if result:
-                session['email'] = email
-                session['profile'] = func.getProfile(email)
-                return redirect('/route_dashboard')
-            else:
-                print(f"Erreur lors de la connexion : {e.pgerror}", "danger")
-                error_message = "no connection"
-                return render_template('login.html', error_message=error_message)
+            print(f"l'utilisateur n'existe pas")
+            error_message = f"user does not exist"
+            return render_template('login.html', error_message=error_message)
         
 @auth.route('/register_user', methods=['GET', 'POST'])
 def register_user():
@@ -90,3 +85,15 @@ def forgot_password():
         return "Password reset link sent to your email!"
     else:
         return render_template('login.html', error_message="Email not found! Try again.")
+
+@auth.route('/logout')
+def logout():
+    if 'email' in session:
+        user.logout(func.getuser(session['email']))
+        return redirect('/')
+    else:
+        return redirect('/')
+    
+@auth.errorhandler(404)
+def page_not_found(e):
+    return redirect('/')
