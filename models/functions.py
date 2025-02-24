@@ -4,9 +4,9 @@ from models.utilisateurs.utilisateur import User
 
 mydb = connection()
 
-def getuser(email, password):
+def getuser(email):
         cursor = mydb.cursor()
-        cursor.execute("SELECT * FROM utilisateur WHERE email = %s AND password = %s", (email,password))
+        cursor.execute("SELECT * FROM utilisateur WHERE email = %s LIMIT 1", (email,))
         result = cursor.fetchone()
         if result :
             # print(result)
@@ -24,7 +24,6 @@ def get_status(email):
         cursor = mydb.cursor()
         cursor.execute("SELECT status FROM utilisateur WHERE email = %s", (email,))
         status = cursor.fetchone()
-        print (email)
         return status[0]
     
 def update_status(email, status):
@@ -48,7 +47,6 @@ def login(email, password):
         # print(email)
         try:
             if get_status(email) != 'online':
-                print("iciiiiiiiiii")
                 cursor = mydb.cursor()
                 query = "SELECT * FROM utilisateur WHERE email = %s AND password = %s"
                 values = (email, password)
