@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - School Management</title>
+
+    <!-- Bootstrap & FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+
+<body class="">
+
+        <!-- Theme Switcher -->
+        <div class="theme-switcher">
+            <label class="switch">
+                <input type="checkbox" id="themeToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- I want it to display a title -->
+        
+        <!-- Login Form -->
+        
+        <div class="login-container">
+            <h2 class="title" style="text-align: center;font-weight: bold;">SCHOOL MANAGEMENT</h2><br>
+            <div class="login-box">
+                <!-- Tabs for switching -->
+                <ul class="nav nav-pills nav-justified mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="login-tab" data-bs-toggle="tab" href="#login-form">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="forgot-tab" data-bs-toggle="tab" href="#forgot-form">Forgot Password</a>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- Login Form -->
+                    <div class="tab-pane fade show active" id="login-form">
+                        <h2>Login</h2>
+                        <form id="loginForm" method="POST" action="/auth/login">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                <input type="text" name="email" id="username" class="form-control" placeholder="Username"
+                                    required>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                                <input type="password" name="mdpass" id="password" class="form-control"
+                                    placeholder="Password" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                        </form>
+                    </div>
+
+                    <!-- Forgot Password Form -->
+                    <div class="tab-pane fade" id="forgot-form">
+                        <h2>Reset Password</h2>
+                        <form id="forgotForm" method="POST" action="/auth/forgot_password">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                                <input type="email" name="email" id="email" class="form-control"
+                                    placeholder="Enter your email" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-warning w-100">Reset Password</button>
+                            <p class="text-center mt-2"><a href="#" id="show-login">Back to Login</a></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap Modal for Error Message -->
+        <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger"><i class="fa fa-exclamation-triangle"></i> Error</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="errorMessage">Invalid credentials. Please try again.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- jQuery & Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    {% if error_message %}
+    <script>
+        $(document).ready(function () {
+            $("#errorMessage").text("{{ error_message }}");
+            $("#errorModal").modal("show");
+        });
+    </script>
+    {% endif %}
+
+</body>
+
+</html>
